@@ -1,5 +1,3 @@
-"""Minimal training utilities for the principle-level CMLM framework."""
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -14,8 +12,6 @@ DEFAULT_LEARNING_RATE = 1e-3
 
 
 class FocalLoss(nn.Module):
-    """Binary/multiclass focal loss for imbalanced MLM classification."""
-
     def __init__(self, gamma=2.0, alpha=None):
         super().__init__()
         self.gamma = gamma
@@ -37,16 +33,12 @@ class FocalLoss(nn.Module):
 
 
 def build_training_components(model, learning_rate=DEFAULT_LEARNING_RATE):
-    """Use the paper-aligned optimizer and loss defaults."""
-
     criterion = FocalLoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     return criterion, optimizer
 
 
 def train_one_epoch(model, dataloader, criterion, optimizer, device):
-    """Train one epoch using a caller-provided multimodal DataLoader."""
-
     model.train()
     total_loss = 0.0
     for original, roi_position, roi, numerical, labels in dataloader:
@@ -67,8 +59,6 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device):
 
 
 def fit(model, dataloader, epochs=100, checkpoint_every=20):
-    """A compact training loop; full cross-validation is intentionally omitted."""
-
     device = get_device()
     model = model.to(device)
     criterion, optimizer = build_training_components(model)
