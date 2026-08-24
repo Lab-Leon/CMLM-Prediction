@@ -8,8 +8,6 @@ def get_device():
 
 
 def save_checkpoint(model, optimizer, epoch, path="checkpoint.pth"):
-    """Save the complete model, including its classifier head."""
-
     torch.save(
         {
             "epoch": epoch,
@@ -28,8 +26,6 @@ def load_checkpoint(model, optimizer, path="checkpoint.pth"):
 
 
 def evaluate(model, dataloader, criterion, device):
-    """Evaluate with the trained classifier and probability-based AUROC."""
-
     model.eval()
     total_loss = 0.0
     probabilities, predictions, labels = [], [], []
