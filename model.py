@@ -1,18 +1,9 @@
-"""A concise, principle-level implementation of the CMLM architecture.
-
-This module intentionally focuses on the multimodal model skeleton described in
-the paper. Cohort construction, MA-YOLO segmentation, feature selection and the
-full validation workflow are outside the scope of this small public example.
-"""
-
 import torch
 import torch.nn as nn
 from torchvision import models
 
 
 class SEAttention(nn.Module):
-    """Channel-wise squeeze-and-excitation for vector features."""
-
     def __init__(self, channels, reduction=16):
         super().__init__()
         hidden = max(channels // reduction, 1)
@@ -28,8 +19,6 @@ class SEAttention(nn.Module):
 
 
 class ResNetFeature(nn.Module):
-    """ResNet feature extractor returning one 512-dimensional image token."""
-
     def __init__(self, model_name):
         super().__init__()
         if model_name == "resnet18":
@@ -46,8 +35,6 @@ class ResNetFeature(nn.Module):
 
 
 class ViTFeature(nn.Module):
-    """ViT-B/16 feature extractor projected from 768 to 512 dimensions."""
-
     def __init__(self, embed_dim=512):
         super().__init__()
         backbone = models.vit_b_16(weights=None)
@@ -60,15 +47,6 @@ class ViTFeature(nn.Module):
 
 
 class MultiModalModel(nn.Module):
-    """Simplified CMLM image, numerical and cross-modal fusion framework.
-
-    Expected inputs:
-      - original_image: original tumour-centred CT representation
-      - roi_with_position: ROI retaining positional/context information
-      - roi_without_position: cropped ROI without positional context
-      - numerical: the nine selected numerical variables, in a fixed order
-    """
-
     def __init__(self, embed_dim=512, num_numerical_features=9, num_classes=2):
         super().__init__()
         self.num_numerical_features = num_numerical_features
